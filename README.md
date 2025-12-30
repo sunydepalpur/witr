@@ -1,4 +1,5 @@
 # witr (why-is-this-running)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/pranshuparmar/witr/badge)](https://scorecard.dev/viewer/?uri=github.com/pranshuparmar/witr)
 
 <img width="631" height="445" alt="witr" src="https://github.com/user-attachments/assets/e51cace3-0070-4200-9d1f-c4c9fbc81b8d" />
 
