@@ -9,7 +9,7 @@ import (
 	"syscall"
 )
 
-func readUser(pid int) string {
+func GetUser(pid int) string {
 	path := "/proc/" + strconv.Itoa(pid)
 
 	info, err := os.Stat(path)

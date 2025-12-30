@@ -5,13 +5,16 @@ witr \- explain why a process, service, or port is running
 
 .SH SYNOPSIS
 .B witr
-[--pid N | --port N | name] [--short] [--tree] [--json] [--warnings] [--no-color] [--env] [--help] [--version]
+[-i] [--pid N | --port N | name] [--short] [--tree] [--json] [--warnings] [--no-color] [--env] [--help] [--version]
 
 .SH DESCRIPTION
 .B witr
-is a Linux tool to explain why a process, service, or port is running, showing ancestry, context, supervisor, health, restarts, and warnings in a clear, colorized output.
+is a Linux tool to explain why a process, service, or port is running, showing ancestry, context, supervisor, health, restarts, and warnings in a clear, colorized output. It also includes an interactive TUI mode.
 
 .SH OPTIONS
+.TP
+.B \-i, \-\-interactive
+Start the interactive TUI mode to monitor TCP/UDP connections and processes.
 .TP
 .B --pid <n>
 Explain a specific PID.

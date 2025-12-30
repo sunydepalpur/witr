@@ -200,9 +200,18 @@ Non‑blocking observations such as:
 
 ## 6. Flags & Options
 
+### Interactive Mode
+
+```bash
+witr -i
+```
+
+### Explain a PID
+
 ```
 --pid <n>         Explain a specific PID
 --port <n>        Explain port usage
+-i, --interactive Interactive TUI mode
 --short           One-line summary
 --tree            Show full process ancestry tree
 --json            Output result as JSON
@@ -210,6 +219,7 @@ Non‑blocking observations such as:
 --no-color        Disable colorized output
 --env             Show only environment variables for the process
 --help            Show this help message
+--version         Show version and exit
 ```
 
 A single positional argument (without flags) is treated as a process or service name.
@@ -494,8 +504,9 @@ nix run github:pranshuparmar/witr -- --port 5000
 
 | Feature | Linux | macOS | Notes |
 |---------|:-----:|:-----:|-------|
-| **Process Inspection** |
-| Basic process info (PID, PPID, user, command) | ✅ | ✅ | |
+| **Process Inspection** | | | |
+| Basic process info | ✅ | ✅ | |
+| Interactive TUI (-i) | ✅ | ✅ | Real-time TCP/UDP/Proc |
 | Full command line | ✅ | ✅ | |
 | Process start time | ✅ | ✅ | |
 | Working directory | ✅ | ✅ | Linux: `/proc`, macOS: `lsof` |

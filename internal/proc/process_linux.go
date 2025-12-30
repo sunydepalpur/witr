@@ -152,7 +152,7 @@ func ReadProcess(pid int) (model.Process, error) {
 		health = "high-mem"
 	}
 
-	user := readUser(pid)
+	user := GetUser(pid)
 
 	sockets, _ := readListeningSockets()
 	inodes := socketsForPID(pid)
@@ -192,4 +192,26 @@ func ReadProcess(pid int) (model.Process, error) {
 		Forked:         forked,
 		Env:            env,
 	}, nil
+}
+
+func GetPPID(pid int) int {
+	statPath := fmt.Sprintf("/proc/%d/stat", pid)
+	stat, err := os.ReadFile(statPath)
+	if err != nil {
+		return 0
+	}
+
+	raw := string(stat)
+	close := strings.LastIndex(raw, ")")
+	if close == -1 {
+		return 0
+	}
+
+	fields := strings.Fields(raw[close+2:])
+	if len(fields) < 2 {
+		return 0
+	}
+
+	ppid, _ := strconv.Atoi(fields[1])
+	return ppid
 }

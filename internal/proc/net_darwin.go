@@ -6,6 +6,8 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
+
+	"github.com/pranshuparmar/witr/pkg/model"
 )
 
 // readListeningSockets returns a map of pseudo-inodes to sockets
@@ -149,4 +151,68 @@ func parseNetstatAddr(addr string) (string, int) {
 	}
 
 	return "", 0
+}
+
+func GetAllConnections() ([]model.Connection, error) {
+	var connections []model.Connection
+
+	// Use lsof to get all network connections
+	// -i = all network files
+	// -n = don't resolve hostnames
+	// -P = don't resolve port names
+	// -F pntP = output PID, name (address), type (IPv4/6), and protocol (TCP/UDP)
+	out, err := exec.Command("lsof", "-i", "-n", "-P", "-F", "pntP").Output()
+	if err != nil {
+		return connections, nil
+	}
+
+	var currentPID int
+	var currentProto string
+	lines := strings.Split(string(out), "\n")
+	for _, line := range lines {
+		if len(line) == 0 {
+			continue
+		}
+		switch line[0] {
+		case 'p':
+			currentPID, _ = strconv.Atoi(line[1:])
+		case 'P':
+			currentProto = line[1:]
+		case 'n':
+			// Format: n*:8080 or n127.0.0.1:8080 or n[::1]:8080 or n127.0.0.1:8080->127.0.0.1:54321
+			addr := line[1:]
+			var localAddr, remoteAddr string
+			var localPort, remotePort int
+
+			if strings.Contains(addr, "->") {
+				parts := strings.Split(addr, "->")
+				localAddr, localPort = parseNetstatAddr(parts[0])
+				remoteAddr, remotePort = parseNetstatAddr(parts[1])
+			} else {
+				localAddr, localPort = parseNetstatAddr(addr)
+			}
+
+			if localPort > 0 {
+				procName := GetCmdline(currentPID)
+				if idx := strings.Index(procName, " "); idx != -1 {
+					procName = procName[:idx]
+				}
+				if idx := strings.LastIndex(procName, "/"); idx != -1 {
+					procName = procName[idx+1:]
+				}
+
+				connections = append(connections, model.Connection{
+					Protocol:   currentProto,
+					LocalAddr:  localAddr,
+					LocalPort:  localPort,
+					RemoteAddr: remoteAddr,
+					RemotePort: remotePort,
+					PID:        currentPID,
+					Process:    procName,
+				})
+			}
+		}
+	}
+
+	return connections, nil
 }

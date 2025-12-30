@@ -7,7 +7,7 @@ import (
 	"strconv"
 )
 
-func readUser(pid int) string {
+func GetUser(pid int) string {
 	// On macOS, we get the UID from ps in ReadProcess and resolve it here
 	// This function is a fallback that just returns unknown
 	return "unknown"

@@ -29,3 +29,11 @@ type Process struct {
 	// Environment variables (key=value)
 	Env []string
 }
+
+// ProcessSummary holds basic information about a process for listing
+type ProcessSummary struct {
+	PID     int
+	PPID    int
+	User    string
+	Command string
+}

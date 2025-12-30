@@ -14,6 +14,7 @@ import (
 	"github.com/pranshuparmar/witr/internal/process"
 	"github.com/pranshuparmar/witr/internal/source"
 	"github.com/pranshuparmar/witr/internal/target"
+	"github.com/pranshuparmar/witr/internal/tui"
 	"github.com/pranshuparmar/witr/pkg/model"
 )
 
@@ -22,7 +23,8 @@ var commit = ""
 var buildDate = ""
 
 func printHelp() {
-	fmt.Println("Usage: witr [--pid N | --port N | name] [--short] [--tree] [--json] [--warnings] [--no-color] [--env] [--help] [--version]")
+	fmt.Println("Usage: witr [--pid N | --port N | name] [-i] [--short] [--tree] [--json] [--warnings] [--no-color] [--env] [--help] [--version]")
+	fmt.Println("  -i, --interactive Interactive TUI mode")
 	fmt.Println("  --pid <n>         Explain a specific PID")
 	fmt.Println("  --port <n>        Explain port usage")
 	fmt.Println("  --short           One-line summary")
@@ -82,8 +84,18 @@ func main() {
 	noColorFlag := flag.Bool("no-color", false, "disable colorized output")
 	envFlag := flag.Bool("env", false, "show only environment variables for the process")
 	helpFlag := flag.Bool("help", false, "show help")
+	interactiveFlag := flag.Bool("i", false, "interactive mode")
+	interactiveLongFlag := flag.Bool("interactive", false, "interactive mode")
 
 	flag.Parse()
+
+	if *interactiveFlag || *interactiveLongFlag {
+		if err := tui.Run(); err != nil {
+			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+			os.Exit(1)
+		}
+		return
+	}
 
 	if *versionFlag {
 		fmt.Printf("witr %s (commit %s, built %s)\n", version, commit, buildDate)
