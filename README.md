@@ -568,3 +568,11 @@ We take the security of **witr** seriously. If you believe you have found a secu
 This project was developed with assistance from AI/LLMs (including GitHub Copilot, ChatGPT, and related tools), supervised by humans who occasionally knew what they were doing.
 
 ---
+
+## Contributors
+
+<a href="https://github.com/pranshuparmar/witr/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=pranshuparmar/witr" />
+</a>
+
+---
